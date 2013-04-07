@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# Startup script for byRequest daemon
+#
+
+if [ -n "`/opt/bin/pidof byRequest`" ]; then
+    /opt/bin/killall byRequest 2>/dev/null
+fi
+
+/opt/bin/byRequest /opt/etc/byRequest.conf
+
+

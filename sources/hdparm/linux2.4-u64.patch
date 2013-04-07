@@ -1,0 +1,11 @@
+--- geom.c.orig	2010-11-24 21:54:48.000000000 +0000
++++ geom.c	2011-01-25 17:19:16.153304598 +0000
+@@ -74,6 +74,8 @@
+ 	return (major(st.st_rdev) == md_major());
+ }
+ 
++typedef unsigned long long u64;
++
+ static int get_sector_count (int fd, __u64 *nsectors)
+ {
+ 	int		err;

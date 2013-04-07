@@ -1,0 +1,11 @@
+--- cups/pstoraster.in  	2010-02-10 14:32:10.000000000 -0600
++++ cups/pstoraster.in  	2013-03-01 12:44:04.602768701 -0600
+@@ -55,7 +55,7 @@ echo INFO: Starting GPL Ghostscript `$bi
+ echo DEBUG: Running $bindir/@GS@ $gsopts -sOUTPUTFILE="%stdout" -c "$profile" -f "$ifile" 1>&2
+ 
+ # Now run Ghostscript...
+-exec $bindir/@GS@ $gsopts -sOUTPUTFILE="%stdout" -c "$profile" -f "$ifile"
++exec $bindir/@GS@ $gsopts -sOUTPUTFILE="%stdout" -c "$profile" -f "$ifile" -r144
+ 
+ #
+ #  End of "$Id: pstoraster.in 9747 2009-05-20 22:33:12Z till $".

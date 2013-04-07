@@ -1,0 +1,67 @@
+--- Makefile.orig	2007-08-17 02:50:59.000000000 -0700
++++ Makefile	2007-08-20 20:41:58.000000000 -0700
+@@ -5,16 +5,18 @@
+ #
+ DESTDIR =
+ 
+-BINPATH = /usr/bin
+-SCRPATH = /etc/atop
+-LOGPATH = /var/log/atop
+-MANPATH = /usr/share/man/man1
+-INIPATH = /etc/rc.d/init.d
+-CRNPATH = /etc/cron.d
+-ROTPATH = /etc/logrotate.d
++BINPATH = /opt/bin
++SCRPATH = /opt/etc/atop
++LOGPATH = /opt/var/log/atop
++MANPATH = /opt/man/man1
++INIPATH = /opt/etc/init.d
++CRNPATH = /opt/etc/cron.d
++ROTPATH = /opt/etc/logrotate.d
+ 
+-CFLAGS  = -O -I. -Wall
+-LDFLAGS = -lncurses -lm -lz
++include Makefile.optware
++
++CFLAGS  = -O -I. $(OPTWARE_CFLAGS) -Wall
++LDFLAGS = $(OPTWARE_LDFLAGS) -lncurses -lm -lz
+ OBJMOD0 = version.o
+ OBJMOD1 = various.o  deviate.o   procdbase.o
+ OBJMOD2 = acctproc.o photoproc.o photosyst.o  rawlog.o ifprop.o parseable.o
+@@ -25,35 +27,24 @@
+ all: 		atop
+ 
+ atop:		atop.o    $(ALLMODS) Makefile
+-		cc atop.o $(ALLMODS) -o atop $(LDFLAGS)
++		$(LD) atop.o $(ALLMODS) -o atop $(LDFLAGS)
+ 
+ clean:
+ 		rm -f *.o
+ 
+ install:	atop
+-		if [ ! -d $(DESTDIR)$(LOGPATH) ]; then mkdir -p $(DESTDIR)$(LOGPATH); fi
+ 		if [ ! -d $(DESTDIR)$(BINPATH) ]; then mkdir -p $(DESTDIR)$(BINPATH); fi
+-		if [ ! -d $(DESTDIR)$(SCRPATH) ]; then mkdir -p $(DESTDIR)$(SCRPATH); fi
+ 		if [ ! -d $(DESTDIR)$(MANPATH) ]; then mkdir -p $(DESTDIR)$(MANPATH); fi
+-		if [ ! -d $(DESTDIR)$(INIPATH) ]; then mkdir -p $(DESTDIR)$(INIPATH); fi
+ 		if [ ! -d $(DESTDIR)$(CRNPATH) ]; then mkdir -p $(DESTDIR)$(CRNPATH); fi
+ 		if [ ! -d $(DESTDIR)$(ROTPATH) ]; then mkdir -p $(DESTDIR)$(ROTPATH); fi
+ 		cp atop   	 $(DESTDIR)$(BINPATH)/atop
+-		chown root	 $(DESTDIR)$(BINPATH)/atop
+-		chmod 04711 	 $(DESTDIR)$(BINPATH)/atop
+ 		-rm              $(DESTDIR)$(BINPATH)/atopsar
+ 		ln -s atop       $(DESTDIR)$(BINPATH)/atopsar
+-		cp atop.daily    $(DESTDIR)$(SCRPATH)
+-		chmod 0711 	 $(DESTDIR)$(SCRPATH)/atop.daily
+ 		cp man/atop.1    $(DESTDIR)$(MANPATH)
+ 		cp man/atopsar.1 $(DESTDIR)$(MANPATH)
+-		cp atop.init     $(DESTDIR)$(INIPATH)/atop
+ 		cp atop.cron     $(DESTDIR)$(CRNPATH)/atop
+ 		cp psaccs_atop   $(DESTDIR)$(ROTPATH)/psaccs_atop
+ 		cp psaccu_atop   $(DESTDIR)$(ROTPATH)/psaccu_atop
+-		touch            $(DESTDIR)$(LOGPATH)/dummy_before
+-		touch            $(DESTDIR)$(LOGPATH)/dummy_after
+-		if [ -z "$(DESTDIR)" ]; then /sbin/chkconfig --add atop; fi
+ 
+ distr:
+ 		rm -f *.o

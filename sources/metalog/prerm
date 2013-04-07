@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ -n "`/opt/bin/pidof metalog`" ]; then
+    /opt/bin/killall metalog 2>/dev/null
+fi
+
+exit 0

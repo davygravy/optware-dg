@@ -1,0 +1,31 @@
+--- cups-1.5.4/backend/lpd.c.orig	2012-02-12 01:20:10.000000000 -0600
++++ cups-1.5.4/backend/lpd.c	2013-03-01 10:10:46.000000000 -0600
+@@ -94,9 +94,15 @@ static int	lpd_queue(const char *hostnam
+ 			  int reserve, int manual_copies, int timeout,
+ 			  int contimeout);
+ static int	lpd_write(int lpd_fd, char *buffer, int length);
++
+ #ifndef HAVE_RRESVPORT_AF
++# if defined (__UCLIBC__) && __UCLIBC_SUBLEVEL__ < 28
++#     warning rresvport_af not defined in old UCLIBC
++# else
+ static int	rresvport_af(int *port, int family);
++# endif
+ #endif /* !HAVE_RRESVPORT_AF */
++
+ static void	sigterm_handler(int sig);
+ 
+ 
+@@ -1211,7 +1217,12 @@ lpd_write(int  lpd_fd,			/* I - LPD sock
+ 
+ static int				/* O  - Socket or -1 on error */
+ rresvport_af(int *port,			/* IO - Port number to bind to */
++#if defined(__UCLIBC__) && __UCLIBC_SUBLEVEL__ < 28
++             sa_family_t family) /* I  - Address family */
++#else
+              int family)		/* I  - Address family */
++#endif
++
+ {
+   http_addr_t	addr;			/* Socket address */
+   int		fd;			/* Socket file descriptor */

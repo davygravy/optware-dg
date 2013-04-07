@@ -1,0 +1,11 @@
+--- git/connect.c.orig	2010-02-13 00:44:43.000000000 +0000
++++ git/connect.c	2010-02-14 18:21:14.956362386 +0000
+@@ -594,7 +594,7 @@
+ 	if (protocol == PROTO_SSH) {
+ 		const char *ssh = getenv("GIT_SSH");
+ 		int putty = ssh && strcasestr(ssh, "plink");
+-		if (!ssh) ssh = "ssh";
++		if (!ssh) ssh = "/opt/bin/ssh";
+ 
+ 		*arg++ = ssh;
+ 		if (putty && !strcasestr(ssh, "tortoiseplink"))

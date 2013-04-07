@@ -1,0 +1,8 @@
+#!/bin/sh
+
+/opt/bin/killall mountd
+/opt/bin/killall statd
+
+# TODO: check if the /opt/etc/exports file is unmodified, and delete it if that is the case.
+
+echo "ipkg_remove: Warning: Not removing /opt/etc/exports"

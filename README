@@ -1,0 +1,7 @@
+For instructions on how to build packages using this build system, see:
+
+  http://www.nslu2-linux.org/wiki/Optware/AddAPackageToOptware
+
+NOTE:  This repo is a fork of Optware, specifically modified and updated
+for Broadcom routers running TomatoUSB and DD-WRT.
+

@@ -1,0 +1,258 @@
+#!/bin/sh
+#
+# $Id: mkscproot 8019 2008-03-19 09:07:08Z marceln $
+#
+# NOTE:
+#	This script works with the standard busybox tools.
+#
+PATH=/bin:/usr/bin:/opt/bin
+
+PROG=${0##*/}
+ERROR=""
+USER=""
+HOME=""
+ROOT=""
+CREATE=""
+PASSWD=""
+FORCE=""
+SUPPORT=2
+
+if [ $(id -u) != 0 ]
+then
+	echo "This program needs to run as root" >&2
+	exit 1
+fi
+
+#
+# To make sure that files are created with the correct permissions.
+#
+umask 022
+
+
+if [ -f /.unslung ]
+then
+	FIRMWARE=unslung
+	FIRMWARE_VERSION=$(cat /.unslung)
+	SUPPORT=""
+elif grep -q OpenSlug /etc/issue
+then
+	FIRMWARE=OpenSlug
+	FIRMWARE_VERSION=$(awk '/OpenSlug/ {print $2}' /etc/issue)
+	SUPPORT="1"
+else
+	FIRMWARE=unknown
+	FIRMWARE_VERSION=unknown
+fi
+
+if SSH_VERSION=$(ssh -V 2>&1)
+then
+	if [ "${SSH_VERSION%_*}" = OpenSSH ]
+	then
+		SSH=openssh
+	else
+		SUPPORT=2
+	fi
+else
+	if DROPBEAR=$(ssh -V 2>&1 | grep Dropbear)
+	then
+		SSH_VERSION="${DROPBEAR}"
+		SSH=dropbear
+		[ ${FIRMWARE} = unslung ] && SUPPORT=2
+	else
+		SSH=unknown
+		SUPPORT=2
+	fi
+fi
+
+while [ $# -ge 1 ]
+do
+	case "$1" in
+		-h)
+			HOME=$2
+			shift 2
+			;;
+		-u)
+			USER=$2
+			shift 2
+			;;
+		-r)
+			ROOT=$2
+			shift 2
+			;;
+		-n)
+			CREATE=1
+			shift
+			;;
+		-e)
+			PASSWD=1
+			shift
+			;;
+		-f)
+			FORCE=1
+			shift
+			;;
+		*)
+			ERROR=1
+			shift
+			;;
+	esac
+done
+
+if [ "${SUPPORT}" ]
+then
+	echo							>&2
+	echo "Unsuported configuration."			>&2
+	echo							>&2
+	echo "Suported configurations:"				>&2
+	echo "	unslung & openssh"				>&2
+	echo							>&2
+	echo "Work in progress:"				>&2
+	echo "	openslug & busybox"				>&2
+	echo							>&2
+	echo "Work in progress:"				>&2
+	echo "	openslug & openssh"				>&2
+	echo							>&2
+	echo "Use \"-f\" (force) to try creating a chroot"	>&2
+	echo							>&2
+	echo "And report succes on the mailinglist"		>&2
+	echo							>&2
+	echo "Detected firmware: $FIRMWARE_VERSION"		>&2
+	echo "Detected ssh: $SSH_VERSION"			>&2
+	echo							>&2
+	if [ ${SUPPORT} = 2  -a ! "${FORCE}" ]
+	then
+		exit 2
+	fi
+fi
+
+if [ -z "${USER}" -o "${ERROR}" ]
+then
+	echo "
+${PROG} [-n] [-r root] [-h <home>] -u <user>
+
+Example:
+	${PROG} -u scponly
+
+Don't use other options unless you know what you do!!
+
+" >&2
+	exit 3
+fi
+
+if [ -z "${ROOT}" ]
+then
+	ROOT="/home/${USER}_root"
+fi
+
+if [ -z "${HOME}" ]
+then
+	HOME="${ROOT}//${USER}"
+fi
+
+#
+# We should use adduser but it's not default installed on unslung
+#
+if [ -z "${CREATE}" ]
+then
+	if grep -q "^${USER}:" /etc/passwd
+	then
+		echo "User exists: Choose a other user name"
+		exit 4
+	fi
+	ID=2000
+	while grep -q :${ID}: /etc/passwd
+	do
+		ID=$((${ID}+1))
+	done
+	echo "${USER}:x:${ID}:100:${USER} (scponly):${HOME}:/opt/sbin/scponlyc" >>/etc/passwd
+fi
+
+mkdir -p "${HOME}"
+
+for d in bin etc lib usr usr/bin usr/lib usr/libexec dev
+do
+	mkdir "${ROOT}/${d}"
+done
+
+chown -R root:root "${ROOT}"
+chmod -R 755 "${ROOT}" "${HOME}"
+
+cd "${ROOT}"
+ln -s usr opt
+
+cd "${ROOT}/bin"
+cp /bin/busybox chgrp
+
+for f in chmod chown ln ls mkdir mv rm rmdir
+do
+	ln chgrp "${f}"
+done
+
+cd "${ROOT}/lib"
+
+for f in ld-linux.so.2 libc.so.6 libcrypt.so.1 libdl.so.2 libm.so.6 libnsl.so.1 libnss_files.so.2 libresolv.so.2 libutil.so.1 libgcc_s.so.1
+do
+	[ -f "/lib/${f}" ] && cp "/lib/${f}" .
+done
+
+cd "${ROOT}/etc"
+
+echo "root:x:0:" > group
+echo "users:x:100:" >> group
+
+echo "root::0:0:::" > passwd
+echo "bin::1:1:::" >> passwd
+echo "${USER}::${ID}:100::/${USER}:" >> passwd
+
+for f in ld.so.conf ld.so.cache
+do
+	[ -f "/etc/${f}" ] && cp "/etc/${f}" .
+done
+
+cd "${ROOT}/dev"
+mknod null c 1 3
+chmod 777 null
+
+cd "${ROOT}/usr/bin"
+
+if [ -f /opt/bin/scp ]
+then
+	cp /opt/bin/scp .
+elif [ -f /usr/bin/scp ]
+then
+	cp /usr/bin/scp .
+fi
+
+cd "${ROOT}/usr/libexec"
+if [ -f /opt/libexec/sftp-server ]
+then
+	cp /opt/libexec/sftp-server .
+elif [ -f /usr/libexec/sftp-server ]
+then
+	cp /usr/libexec/sftp-server .
+fi
+
+cd "${ROOT}/usr/lib"
+[ -f /opt/lib/libcrypto.so.0.9.7  ] && cp /opt/lib/libcrypto.so.0.9.7 .
+
+if [ -f /opt/lib/libz.so.1.2.3 ]
+then
+	cp /opt/lib/libz.so.1.2.3 .
+	ln -s libz.so.1.2.3 libz.so
+	ln -s libz.so.1.2.3 libz.so.1
+elif [ -f /usr/lib/libz.so.1.2.3 ]
+then
+	cp /usr/lib/libz.so.1.2.3 .
+	ln -s libz.so.1.2.3 libz.so
+	ln -s libz.so.1.2.3 libz.so.1
+fi
+
+if [ -z "${PASSWD}" ]
+then
+	passwd "${USER}"
+fi
+
+#
+# This doesn't work if we do it to fast after adding the account (bug?)
+#
+chown "${USER}":100 "${HOME}"

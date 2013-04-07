@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ -n "`pidof cron`" ]; then
+    /opt/bin/killall cron 2>/dev/null
+fi
+
+exit 0

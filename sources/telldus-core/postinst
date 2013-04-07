@@ -1,0 +1,7 @@
+#!/bin/sh
+#
+# $Id: postinst 12561 2011-09-04 14:25:04Z jenkins $
+#
+
+/opt/etc/init.d/S50tellstick
+

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ -n "`/opt/bin/pidof atd`" ]; then
+    /opt/bin/killall atd 2>/dev/null
+fi
+
+exit 0

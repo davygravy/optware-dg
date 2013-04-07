@@ -1,0 +1,8 @@
+--- perltgdcli.pl.orig	2008-03-16 10:17:51.000000000 +1030
++++ perltgdcli.pl	2008-03-16 20:17:39.000000000 +1030
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl
++#!/opt/bin/perl
+ 
+ #	  perltgd jim16 Thu 14 Dec 13:13:00
+ #

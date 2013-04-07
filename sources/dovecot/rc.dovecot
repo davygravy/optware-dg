@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+# $Id: rc.dovecot 8758 2008-07-18 22:24:05Z marceln $
+
+if [ -z "$1" ] ; then
+    case "${0##*/}" in
+	S??*) rc="start" ;;
+	K??*) rc="stop" ;;
+	*) rc="usage" ;;
+    esac
+else
+    rc="$1"
+fi
+
+case "$rc" in
+    start)
+	/opt/sbin/dovecot
+	;;
+    stop)
+	killall dovecot > /dev/null 2>&1
+	;;
+    restart)
+	"$0" stop
+	sleep 1
+	"$0" start
+	;;
+    *)
+	echo "Usage: $0 (start|stop|restart|usage)"
+	;;
+esac

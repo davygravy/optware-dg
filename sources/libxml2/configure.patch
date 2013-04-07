@@ -1,0 +1,22 @@
+--- libxml2-2.7.4/configure.orig	2009-09-10 16:10:26.000000000 +0000
++++ libxml2-2.7.4/configure	2009-09-19 05:42:40.664676456 +0000
+@@ -10442,7 +10442,7 @@
+ }'`
+   sys_lib_search_path_spec=`$ECHO $lt_search_path_spec`
+ else
+-  sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
++  sys_lib_search_path_spec=""
+ fi
+ library_names_spec=
+ libname_spec='lib$name'
+@@ -10787,8 +10787,8 @@
+   esac
+   shlibpath_var=LD_LIBRARY${shlibsuff}_PATH
+   shlibpath_overrides_runpath=no
+-  sys_lib_search_path_spec="/usr/lib${libsuff} /lib${libsuff} /usr/local/lib${libsuff}"
+-  sys_lib_dlsearch_path_spec="/usr/lib${libsuff} /lib${libsuff}"
++  sys_lib_search_path_spec=""
++  sys_lib_dlsearch_path_spec=""
+   hardcode_into_libs=yes
+   ;;
+ 

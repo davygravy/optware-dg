@@ -1,0 +1,11 @@
+--- ftpd-topfield/libtopfield/usb_io.h.orig	2008-05-08 04:36:42.000000000 +0000
++++ ftpd-topfield/libtopfield/usb_io.h	2008-05-08 14:29:35.000000000 +0000
+@@ -37,7 +37,7 @@
+ /* linux/usb_ch9.h wasn't separated out until 2.4.23 */
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,4,23)
+ /* But moved again in 2.6.22! */
+-	#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,22)
++	#if 1
+ 		#include <linux/usb/ch9.h>
+ 	#else
+ 		#include <linux/usb_ch9.h>

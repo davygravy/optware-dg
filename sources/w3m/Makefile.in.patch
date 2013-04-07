@@ -1,0 +1,13 @@
+--- w3m-0.5.3/Makefile.in.orig	2011-01-04 09:22:18.000000000 +0000
++++ w3m-0.5.3/Makefile.in	2011-01-23 23:07:08.116157886 +0000
+@@ -176,8 +176,10 @@
+ 	./mktable$(EXT) 100 functable.tab > $@
+ 	-rm -f functable.tab
+ 
++ifeq ($(CROSS_COMPILATION), no)
+ mktable$(EXT): mktable.o dummy.o Str.o hash.o myctype.o
+ 	$(CC) $(CFLAGS) -o mktable mktable.o dummy.o Str.o hash.o myctype.o $(LDFLAGS) $(LIBS) $(GC_LIBS)
++endif
+ 
+ $(BOOKMARKER): w3mbookmark.o dummy.o $(ALIB)
+ 	$(CC) $(CFLAGS) -o $(BOOKMARKER) w3mbookmark.o dummy.o $(LDFLAGS) $(LIBS) $(EXT_LIBS)

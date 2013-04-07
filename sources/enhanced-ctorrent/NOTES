@@ -1,0 +1,14 @@
+Enhanced CTorrent is built from the patched sources from Dennis Holmes
+(dholmes@ct.boxmail.com), available at http://www.rahul.net/dholmes/ctorrent.
+
+The current version is dnh3.3.2, which contains the latest bug fixes and some
+optimizations. The full changelog is available at the developer's site, see
+http://www.rahul.net/dholmes/ctorrent/changelog.html.
+
+Enhanced CTorrent has only been tested on the NSLU2, although it builds 
+correctly on some other platforms. Testers are welcomed.
+
+Please check the Enhanced CTorrent page in the nslu2-linux project wiki,
+at http://www.nslu2-linux.org/wiki/Unslung/EnhancedCTorrent.
+
+Fernando Carolo (carolo@gmail.com).

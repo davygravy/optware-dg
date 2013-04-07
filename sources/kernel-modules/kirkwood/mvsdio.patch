@@ -1,0 +1,16 @@
+X-Git-Url: http://git.marvell.com/?p=orion.git;a=blobdiff_plain;f=drivers%2Fmmc%2Fcore%2Fsd.c;fp=drivers%2Fmmc%2Fcore%2Fsd.c;h=ba4c7ab1bc4797e3b5df4010831ebcd4130ae5b0;hp=cd81c395e1646056cd90a82200d09bff9e09a03f;hb=3ea638523747f6d312f11f643a3175c1a4661eec;hpb=c0c3df02efed0e5dea9aa4d8313e06e1f68f2cb4
+
+--- kernel/drivers/mmc/core/core.c.orig	2009-04-14 20:51:48.000000000 +0000
++++ kernel/drivers/mmc/core/core.c	2009-04-19 17:36:35.985746917 +0000
+@@ -286,9 +286,9 @@
+ 			 * The limit is really 250 ms, but that is
+ 			 * insufficient for some crappy cards.
+ 			 */
+-			limit_us = 300000;
++			limit_us = 500000;
+ 		else
+-			limit_us = 100000;
++			limit_us = 200000;
+ 
+ 		/*
+ 		 * SDHC cards always use these fixed values.

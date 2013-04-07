@@ -1,0 +1,12 @@
+--- src/ejabberd_s2s_in.erl.orig	2010-12-13 11:21:26.000000000 +0000
++++ src/ejabberd_s2s_in.erl	2010-12-15 00:24:58.934268207 +0000
+@@ -58,8 +58,7 @@
+ -define(PKIXEXPLICIT, 'OTP-PKIX').
+ -define(PKIXIMPLICIT, 'OTP-PKIX').
+ -else.
+--include_lib("ssl/include/PKIX1Explicit88.hrl").
+--include_lib("ssl/include/PKIX1Implicit88.hrl").
++-include_lib("ssl/include/OTP-PKIX.hrl").
+ -define(PKIXEXPLICIT, 'PKIX1Explicit88').
+ -define(PKIXIMPLICIT, 'PKIX1Implicit88').
+ -endif.

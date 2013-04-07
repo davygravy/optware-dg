@@ -1,0 +1,12 @@
+--- whois/config.h.orig	2009-08-12 19:43:41.000000000 +0000
++++ whois/config.h	2009-10-23 16:41:04.834305251 +0000
+@@ -16,9 +16,6 @@
+ 
+ 
+ /* autoconf in cpp macros */
+-#ifdef linux
+-# define ENABLE_NLS
+-#endif
+ 
+ #ifdef __FreeBSD__
+ /* which versions? */

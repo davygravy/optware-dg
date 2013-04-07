@@ -1,0 +1,25 @@
+--- setup.py.orig	2011-07-01 18:54:23.000000000 +0000
++++ setup.py	2011-07-04 19:55:03.894622615 +0000
+@@ -36,22 +36,6 @@
+     raise SystemExit(
+         "Couldn't import standard zlib (incomplete Python install).")
+ 
+-# The base IronPython distribution (as of 2.7.1) doesn't support bz2
+-isironpython = False
+-try:
+-    isironpython = platform.python_implementation().lower().find("ironpython") != -1
+-except:
+-    pass
+-
+-if isironpython:
+-    print "warning: IronPython detected (no bz2 support)"
+-else:
+-    try:
+-        import bz2
+-    except:
+-        raise SystemExit(
+-            "Couldn't import standard bz2 (incomplete Python install).")
+-
+ import os, subprocess, time
+ import shutil
+ import tempfile

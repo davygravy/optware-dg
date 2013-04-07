@@ -1,0 +1,29 @@
+--- proftpd/include/default_paths.h.orig	2004-11-03 00:40:07.000000000 +0000
++++ proftpd/include/default_paths.h	2009-03-06 17:34:42.422823281 +0000
+@@ -63,7 +63,9 @@
+ /* The location of your `shells' file; a newline delimited list of
+  * valid shells on your system.
+  */
++#ifndef PR_VALID_SHELL_PATH
+ #define PR_VALID_SHELL_PATH	"/etc/shells"
++#endif
+ 
+ /* Where your log files are kept.  The "wu-ftpd style" xferlog is
+  * stored here, as well as "extended" (not yet available) transfer
+@@ -75,11 +77,15 @@
+ /* Location of the file that tells proftpd to discontinue servicing
+  * requests.
+  */
++#ifndef PR_SHUTMSG_PATH
+ #define PR_SHUTMSG_PATH		"/etc/shutmsg"
++#endif
+ 
+ /* Location of the file containing users that *cannot* use ftp
+  * services (odd, eh?)
+  */
+-#define PR_FTPUSERS_PATH	"/etc/ftpusers"
++#ifndef PR_FTPUSERS_PATH
++#define PR_FTPUSERS_PATH	"/opt/etc/ftpusers"
++#endif
+ 
+ #endif /* PROFTPD_PATHS_H */

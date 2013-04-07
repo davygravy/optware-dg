@@ -1,0 +1,15 @@
+--- src/dnsmasq.h.orig	2009-02-01 15:59:35.000000000 +0000
++++ src/dnsmasq.h	2009-02-07 04:23:12.326983198 +0000
+@@ -97,6 +97,12 @@
+ 
+ #if defined(HAVE_LINUX_NETWORK)
+ #include <linux/capability.h>
++#ifndef ARPHRD_IEEE1394
++#   define ARPHRD_IEEE1394 24
++#endif
++#ifndef ARPHRD_EUI64
++#   define ARPHRD_EUI64 27
++#endif
+ /* There doesn't seem to be a universally-available 
+    userpace header for these. */
+ extern int capset(cap_user_header_t header, cap_user_data_t data);

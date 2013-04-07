@@ -1,0 +1,16 @@
+--- poppler/TextOutputDev.cc.orig	2013-03-03 22:00:49.092987405 -0600
++++ poppler/TextOutputDev.cc	2013-03-03 22:00:20.002212770 -0600
+@@ -64,6 +64,13 @@
+ #include "ICSupport.h"
+ #endif
+ 
++#ifdef __GLIBC_PREREQ
++#if !__GLIBC_PREREQ(2,3)
++#define fmax(x,y)  (((x)>=(y))?(x):(y))
++#define fmin(x,y)  (((x)<=(y))?(x):(y))
++#endif
++#endif
++
+ //------------------------------------------------------------------------
+ // parameters
+ //------------------------------------------------------------------------

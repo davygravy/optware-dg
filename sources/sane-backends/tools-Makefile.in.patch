@@ -1,0 +1,11 @@
+--- sane-backends/tools/Makefile.in.orig	2009-03-02 18:53:42.000000000 -0800
++++ sane-backends/tools/Makefile.in	2009-04-24 22:01:31.000000000 -0700
+@@ -355,7 +355,7 @@
+ 	$(LINK) $(gamma4scanimage_OBJECTS) $(gamma4scanimage_LDADD) $(LIBS)
+ sane-desc$(EXEEXT): $(sane_desc_OBJECTS) $(sane_desc_DEPENDENCIES) 
+ 	@rm -f sane-desc$(EXEEXT)
+-	$(LINK) $(sane_desc_OBJECTS) $(sane_desc_LDADD) $(LIBS)
++	gcc -DHAVE_ISFDTYPE -I. sane-desc.c -I../include ../sanei/sanei_config.c ../sanei/sanei_init_debug.c ../sanei/sanei_constrain_value.c -o $@
+ sane-find-scanner$(EXEEXT): $(sane_find_scanner_OBJECTS) $(sane_find_scanner_DEPENDENCIES) 
+ 	@rm -f sane-find-scanner$(EXEEXT)
+ 	$(LINK) $(sane_find_scanner_OBJECTS) $(sane_find_scanner_LDADD) $(LIBS)

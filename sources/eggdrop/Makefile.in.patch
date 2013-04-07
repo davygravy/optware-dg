@@ -1,0 +1,24 @@
+--- eggdrop/Makefile.in.orig	2004-08-27 23:43:21.000000000 -0700
++++ eggdrop/Makefile.in	2009-07-05 08:55:06.000000000 -0700
+@@ -36,9 +36,9 @@
+ SHLIB_CC = @SHLIB_CC@
+ 
+ # Linker
+-LD = @CC@
+-MOD_LD = @MOD_LD@
+-SHLIB_LD = @SHLIB_LD@
++LD = @CC@ $(LDFLAGS)
++MOD_LD = @MOD_LD@ $(LDFLAGS)
++SHLIB_LD = @SHLIB_LD@ $(LDFLAGS)
+ 
+ # Stripping
+ # To turn STRIP off, use 'STRIP = touch' not 'STRIP ='.
+@@ -71,7 +71,7 @@
+ 
+ modconf = $(top_srcdir)/misc/modconfig --top_srcdir=$(top_srcdir)
+ 
+-egg_test_run = EGG_LANGDIR=$(top_srcdir)/language ./$(EGGEXEC) -v
++egg_test_run = EGG_LANGDIR=$(top_srcdir)/language #./$(EGGEXEC) -v
+ 
+ post_config  =  echo "" && \
+ 		echo "You can now compile the bot, using \"make\"." && \

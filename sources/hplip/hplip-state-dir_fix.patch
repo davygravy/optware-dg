@@ -1,0 +1,11 @@
+--- Makefile.am.orig	2011-10-01 22:06:19.000000000 -0500
++++ Makefile.am	2013-03-27 15:41:17.874380697 -0500
+@@ -110,7 +110,7 @@ pstotiffdir = $(cupsfilterdir)
+ pstotiff_SCRIPTS = fax/filters/pstotiff
+ 
+ # hplip.state
+-hplip_statedir = /var/lib/hp
++hplip_statedir = /opt/var/lib/hp
+ dist_hplip_state_DATA = hplip.state
+ 
+ if FULL_BUILD

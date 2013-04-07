@@ -1,0 +1,11 @@
+--- Makefile.PL.orig	2007-07-20 10:27:38.000000000 -0700
++++ Makefile.PL	2007-10-16 20:51:28.000000000 -0700
+@@ -37,7 +37,7 @@
+ 	unlink("t/DefaultPort.pm");
+ }
+ else {
+-  my $file=undef;
++  my $file='/dev/ttyS1';
+   my $test;
+   foreach $test (@SERIALS) {
+     print "\tchecking '$test' ... ";

@@ -1,0 +1,29 @@
+--- mkfiles/mkfile-Linux-spim.orig	2006-10-06 09:04:23.000000000 +0000
++++ mkfiles/mkfile-Linux-spim	2009-03-30 21:35:23.484012396 +0000
+@@ -16,12 +16,10 @@
+ 		-Os\
+ 		-I$ROOT/Linux/spim/include\
+ 		-I$ROOT/include\
+- 		-I/usr/X11R6/include
+ 
+ ANSICPP=
+ LD=		mipsel-linux-uclibc-gcc
+-LDFLAGS=	-L/usr/openwin/lib\
+-		-L/usr/X11R6/lib\
++LDFLAGS=
+ 
+ SYSLIBS=
+ 
+--- emu/Linux/mkfile.orig	2009-04-05 16:48:28.000000000 +0000
++++ emu/Linux/mkfile	2009-04-05 22:23:44.775922792 +0000
+@@ -4,8 +4,8 @@
+ 
+ #Configurable parameters
+ 
+-CONF=emu			#default configuration
+-CONFLIST=emu
++CONF=emu-g			#default configuration
++CONFLIST=emu-g
+ CLEANCONFLIST=
+ 
+ INSTALLDIR=$ROOT/$SYSTARG/$OBJTYPE/bin	#path of directory where kernel is installed

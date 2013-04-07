@@ -1,0 +1,120 @@
+--- configure.ac.orig	2009-03-08 07:46:47.000000000 -0700
++++ configure.ac	2009-09-21 10:10:49.000000000 -0700
+@@ -104,8 +104,8 @@
+ 	AC_MSG_CHECKING([for $i/include include directory])
+ 	if test -d $i/include; then
+ 		AC_MSG_RESULT(yes)
+-		CPPFLAGS="$CPPFLAGS -I$i/include/"
+-		CFLAGS="$CFLAGS -I$i/include/"
++		# CPPFLAGS="$CPPFLAGS -I$i/include/"
++		# CFLAGS="$CFLAGS -I$i/include/"
+ 	else
+ 	AC_MSG_RESULT(no)
+ 	fi
+@@ -113,7 +113,7 @@
+ 	AC_MSG_CHECKING([for $i/lib library directory])
+ 	if test -d $i/lib; then
+ 		AC_MSG_RESULT(yes)
+-		LDFLAGS="$LDFLAGS -L$i/lib/ -R$i/lib/"
++		# LDFLAGS="$LDFLAGS -L$i/lib/ -R$i/lib/"
+ 	else
+ 		AC_MSG_RESULT(no)
+ 	fi
+@@ -121,7 +121,7 @@
+ 	AC_MSG_CHECKING([for $i/bin command directory])
+ 	if test -d $i/bin; then
+ 		AC_MSG_RESULT(yes)
+-		optbindirs="$optbindirs $i/bin"
++		# optbindirs="$optbindirs $i/bin"
+ 	else
+ 		AC_MSG_RESULT(no)
+ 	fi
+@@ -323,25 +323,11 @@
+ #
+ 
+ AC_MSG_CHECKING([if we are compiling against glibc])
+-AC_RUN_IFELSE(
+-	[
+-		AC_LANG_PROGRAM(
+-			[
+-				#include <stdlib.h>
+-				#ifdef __GLIBC__
+-				#define STATUS 0
+-				#else
+-				#define STATUS 1
+-				#endif
+-			],
+-			[
+-				return STATUS;
+-			]
+-		)
+-	], 
+-	[glibc=yes], 
+-	[glibc=no] 
+-)
++if test ${LIBC_STYLE} = glibc; then
++	glibc=yes
++else
++	glibc=no
++fi
+ 
+ if test "$glibc" = yes; then
+ 	AC_MSG_RESULT(yes)
+@@ -759,26 +745,7 @@
+ #
+ 
+ AC_MSG_CHECKING([if realpath accepts null for its second argument])
+-AC_RUN_IFELSE(
+-	[
+-		AC_LANG_PROGRAM(
+-			[
+-				#include <limits.h>
+-				#include <errno.h>
+-				#include <stdlib.h>
+-			],
+-			[
+-				int status; 
+-				char *res; 
+-				res = realpath( "somefile", 0 ); 
+-				status = !(res != 0 || errno == ENOENT); 
+-				exit( status );
+-			]
+-		)
+-	], 
+-	[have_realpath_null=yes], 
+-	[have_realpath_null=no] 
+-)
++	have_realpath_null=no
+ 
+ if test "$have_realpath_null" = yes; then
+ 	AC_MSG_RESULT(yes)
+@@ -833,29 +800,7 @@
+ if test "$ac_cv_func_fwprintf" = yes; then
+ 
+ 	AC_MSG_CHECKING([if fwprintf is broken])
+-	AC_RUN_IFELSE(
+-		[
+-			AC_LANG_PROGRAM(
+-				[
+-					#include <stdlib.h>
+-					#include <stdio.h>
+-					#include <locale.h>
+-					#include <wchar.h>
+-				],
+-				[
+-					setlocale( LC_ALL, "" );
+-					fwprintf( stderr, L"%ls%ls", L"", L"fish:" );
+-				]
+-			)
+-		],
+-		[
+ 			AC_MSG_RESULT(no)
+-		],
+-		[
+-			AC_MSG_RESULT([yes])
+-			AC_DEFINE([HAVE_BROKEN_FWPRINTF], [1], [Define to 1 one if the implemented fwprintf is broken])
+-		] 
+-	)
+ 
+ fi
+ 

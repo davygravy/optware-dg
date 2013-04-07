@@ -1,0 +1,25 @@
+--- mysql-4.1.22/sql/Makefile.am.orig	2006-11-02 18:16:50.000000000 -0800
++++ mysql-4.1.22/sql/Makefile.am	2008-04-16 16:21:53.000000000 -0700
+@@ -105,7 +105,7 @@
+ 			-DSHAREDIR="\"$(MYSQLSHAREdir)\"" \
+ 			@DEFS@
+ 
+-BUILT_SOURCES =		sql_yacc.cc sql_yacc.h lex_hash.h
++BUILT_SOURCES =		sql_yacc.cc sql_yacc.h
+ EXTRA_DIST =		udf_example.cc $(BUILT_SOURCES)
+ AM_YFLAGS =		-d
+ 
+@@ -140,9 +140,10 @@
+ # This generates lex_hash.h
+ # NOTE Built sources should depend on their sources not the tool
+ # this avoid the rebuild of the built files in a source dist
+-lex_hash.h:	gen_lex_hash.cc lex.h
+-		$(MAKE) $(AM_MAKEFLAGS) gen_lex_hash$(EXEEXT)
+-		./gen_lex_hash$(EXEEXT) > $@
++GEN_LEX_HASH=./gen_lex_hash
++
++lex_hash.h:	lex.h
++		$(GEN_LEX_HASH) > $@
+ 
+ # For testing of udf_example.so;  Works on platforms with gcc
+ # (This is not part of our build process but only provided as an example)

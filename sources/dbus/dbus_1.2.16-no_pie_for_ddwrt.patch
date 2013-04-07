@@ -1,0 +1,35 @@
+--- configure	2009-07-14 14:43:08.000000000 -0500
++++ configure	2013-03-10 11:46:15.848078775 -0500
+@@ -25213,19 +25211,19 @@ if test "x$GCC" = "xyes"; then
+      ;;
+   esac
+ 
+-  case " $CFLAGS " in
+-  *[\ \	]-fPIE[\ \	]*) ;;
+-  *) if cc_supports_flag -fPIE; then
+-        PIE_CFLAGS="-fPIE"
+-        if ld_supports_flag -z,relro; then
+-           PIE_LDFLAGS="-pie -Wl,-z,relro"
+-        else
+-           PIE_LDFLAGS="-pie"
+-        fi
+-     fi
+-     ;;
+-  esac
+-
++  case " $CFLAGS " in
++  *[\ \	]-fPIE[\ \	]*) ;;
++  *) if cc_supports_flag -fPIE; then
++        PIE_CFLAGS=" "
++        if ld_supports_flag -z,relro; then
++           PIE_LDFLAGS=" "
++        else
++           PIE_LDFLAGS=" "
++        fi
++     fi
++     ;;
++  esac
++
+   ### Disabled warnings, and compiler flag overrides
+ 
+   # Let's just ignore unused for now

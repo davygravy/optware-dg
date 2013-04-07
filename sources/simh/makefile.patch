@@ -1,0 +1,15 @@
+--- makefile.orig	2008-11-19 21:53:48.000000000 +0000
++++ makefile	2009-02-14 04:15:41.398099303 +0000
+@@ -12,10 +12,10 @@
+       OS_CCDEFS = -lrt -lm -D_GNU_SOURCE
+     endif
+   endif
+-  CC = gcc -std=c99 -U__STRICT_ANSI__ -g $(OS_CCDEFS) -I .
++  CC = $(TARGET_CC) -std=c99 -U__STRICT_ANSI__ -g $(OS_CCDEFS) -I .
+   ifeq ($(USE_NETWORK),)
+   else
+-    NETWORK_OPT = -DUSE_NETWORK -isystem /usr/local/include /usr/local/lib/libpcap.a
++    NETWORK_OPT = -DUSE_NETWORK -isystem $(CPPFLAGS) -lpcap
+   endif
+ else
+   #Win32 Environments

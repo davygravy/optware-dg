@@ -1,0 +1,38 @@
+--- jove4.16.0.70/Makefile	2005-10-01 00:14:41.000000000 +0200
++++ jove/Makefile	2007-06-21 16:34:59.000000000 +0200
+@@ -160,7 +160,7 @@
+ #	SCO UNIX: TERMCAPLIB = -lcurses
+ #	AIX on the R6000s: TERMCAPLIB = -lcurses -ltermcap -ls
+ 
+-TERMCAPLIB = -ltermcap
++TERMCAPLIB = -lncurses
+ 
+ # Extra libraries flags needed by oddball systems.
+ # Modern BSD systems using openpty need its library.
+@@ -209,9 +209,8 @@
+ # Set LOCALCFLAGS and LOCALLDFLAGS appropriately too. For Xenix, note
+ # that LOCALCFLAGS must be set to $(MEMFLAGS)
+ 
+-LOCALCC = $(CC)
+-LOCALCFLAGS = $(CFLAGS)	# $(MEMFLAGS)
+-LOCALLDFLAGS = $(LDFLAGS)
++#LOCALCFLAGS = $(CFLAGS)	# $(MEMFLAGS)
++#LOCALLDFLAGS = $(LDFLAGS)
+ 
+ # Objects are grouped into overlays for the benefit of (at least) 2.xBSD.
+ 
+@@ -281,9 +280,11 @@
+ 
+ # all: default target.
+ # Builds everything that "install" needs.
+-all:	jjove$(XEXT) recover$(XEXT) teachjove$(XEXT) portsrv$(XEXT) \
+-	doc/cmds.doc doc/jove.$(MANEXT) doc/teachjove.$(MANEXT) \
+-	doc/jovetool.$(MANEXT)
++all:	jjove$(XEXT) 
++
++#recover$(XEXT) teachjove$(XEXT) portsrv$(XEXT) \
++#	doc/cmds.doc doc/jove.$(MANEXT) doc/teachjove.$(MANEXT) \
++#	doc/jovetool.$(MANEXT)
+ 
+ jjove$(XEXT):	$(OBJECTS)
+ 	$(LDCC) $(LDFLAGS) $(OPTFLAGS) -o jjove$(XEXT) $(OBJECTS) $(TERMCAPLIB) $(EXTRALIBS)

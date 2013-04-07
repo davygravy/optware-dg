@@ -1,0 +1,22 @@
+--- Makefile.in.orig	2008-05-14 10:04:51.000000000 +0000
++++ Makefile.in	2008-05-30 03:01:29.000000000 +0000
+@@ -362,8 +362,8 @@
+ 
+ # Running gst inside the build directory...
+ GST_OPTS = --kernel-dir="@abs_top_srcdir@/kernel" --image="@abs_top_builddir@/gst.im"
+-GST = ./gst --no-user-files $(GST_OPTS)
+-GST_PACKAGE = ./gst-tool gst-package $(GST_OPTS)
++GST = $(GNU_SMALLTALK_HOST_BUILD_DIR)/gst --no-user-files $(GST_OPTS)
++GST_PACKAGE = $(GNU_SMALLTALK_HOST_BUILD_DIR)/gst-tool gst-package $(GST_OPTS)
+ 
+ ###########################################################
+ #
+@@ -1181,7 +1181,7 @@
+ 	  --srcdir="$(srcdir)" $(srcdir)/packages.xml
+ 	$(mkdir_p) $(DESTDIR)$(imagedir)
+ 	cd $(DESTDIR)$(imagedir) && \
+-	  "@abs_top_builddir@/gst" --no-user-files -i \
++	  "$(GNU_SMALLTALK_HOST_BUILD_DIR)/gst" --no-user-files -i \
+ 	    --kernel-dir="$(DESTDIR)$(pkgdatadir)/kernel" \
+ 	    --image="$(DESTDIR)$(imagedir)/gst.im" \
+ 	    -f "@abs_top_srcdir@/scripts/Finish.st" \

@@ -1,0 +1,11 @@
+--- src/config.h.orig	2009-02-05 12:14:24.000000000 +0000
++++ src/config.h	2009-02-07 04:29:56.985277792 +0000
+@@ -53,7 +53,7 @@
+ #   if defined(__FreeBSD__)
+ #      define CONFFILE "/usr/local/etc/dnsmasq.conf"
+ #   else
+-#      define CONFFILE "/etc/dnsmasq.conf"
++#      define CONFFILE "/opt/etc/dnsmasq.conf"
+ #   endif
+ #endif
+ 

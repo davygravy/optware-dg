@@ -1,0 +1,36 @@
+#!/bin/sh
+EXE=avahi-daemon
+BIN=/opt/sbin/$EXE
+OPTIONS="-D"
+RUN_D=/opt/var/run/$EXE
+case $1 in
+ start)
+  mkdir -p $RUN_D
+  $BIN $OPTIONS
+  ;;
+ stop)
+  $BIN -k
+  rm -r $RUN_D
+  ;;
+ reload)
+  if [ -f $RUN_D/pid ]; then
+        $BIN -r;
+  else
+        mkdir -p $RUN_D;
+        $BIN $OPTIONS;
+  fi
+  ;;
+ restart)
+  if [ -f $RUN_D/pid ]; then
+          $BIN -k
+          rm -r $RUN_D	  
+  fi
+  mkdir -p $RUN_D
+  $BIN $OPTIONS
+  ;;
+ *)
+  echo "usage: $0 (start|stop|reload|restart)"
+  exit 1
+esac
+exit $?
+

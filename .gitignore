@@ -1,0 +1,18 @@
+# ignore contents of these dirs 
+builds/*
+
+downloads/*
+host/*
+staging/*
+tmp/*
+toolchain/*
+
+
+#  ignore these _dirs_ completely
+ddwrt
+
+# ignore cvs and svn stuff for now
+.svn*
+cvs*
+
+

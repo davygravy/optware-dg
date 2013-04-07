@@ -1,0 +1,72 @@
+#!/bin/sh
+# /etc/init.d/cupds
+# Description: Starts the CUPS daemon (cupsd) on startup
+# ----------------
+#
+# adapted for Optware for Broadcomm DD-WRT or TomatoUSB
+
+# Adjust any of the following according to your distros structure and expectations:
+
+
+CUPSDBIN="/opt/sbin/cupsd"
+
+
+case $1 in
+
+    start)
+	if [ -n "`/opt/bin/pidof cupsd`" ]; then
+        	printf "CUPS seems to be already running with PID "
+		echo "`/opt/bin/pidof cupsd`"
+	else
+		printf "Starting CUPS daemon..."
+		$CUPSDBIN
+		sleep 1
+		printf "started with PID "
+		echo "`/opt/bin/pidof cupsd`"
+	fi
+    ;;
+
+
+    stop)
+    	if [ -n $CUPSDPID ]; then
+            printf "Stopping CUPS daemon..."
+            kill "`/opt/bin/pidof cupsd`"
+            sleep 1
+            if [ -n "`/opt/bin/pidof cupsd`" ]; then
+               	echo "Unable to stop CUPS daemon..."
+		echo "Try killing it manually"
+            else
+                echo "Stopped"
+            fi
+        else
+            echo "CUPS daemon is not running"
+        fi
+    ;;
+
+    restart)
+            if [ -n "`/opt/bin/pidof cupsd`" ]; then
+                printf "Restarting CUPS daemon..."
+                kill "`/opt/bin/pidof cupsd`"
+                sleep 1
+                if [ -n "`/opt/bin/pidof cupsd`" ]; then
+                    echo "Unable to stop CUPS daemon..."
+		    echo "Try killing it manually"
+                else
+                    echo "CUPS daemon stopped"
+                    sleep 1
+                    $CUPSDBIN
+                    sleep 1
+                    echo "CUPS daemon restarted with PID " "`/opt/bin/pidof cupsd`"
+                fi
+            else
+                echo "CUPS daemon is not running, so use the start option"
+            fi
+    ;;
+
+
+    *)
+            echo "Usage: cloudprint-daemon {start|stop|restart}"
+    ;;
+esac
+exit 0
+

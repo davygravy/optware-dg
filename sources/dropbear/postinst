@@ -1,0 +1,37 @@
+#!/bin/sh
+
+update-alternatives --install /opt/bin/scp scp /opt/sbin/dropbearmulti 50
+update-alternatives --install /opt/bin/ssh ssh /opt/sbin/dropbearmulti 50
+
+echo
+
+if [ ! -e /dev/urandom ]; then
+    unset REPLY
+    until [ "$REPLY" == "y" -o "$REPLY" == "n" ]
+    do
+        echo -n "/dev/urandom was not found and is required by dropbear.  Create it? (y/n):"
+        read REPLY
+    done
+    if [ "$REPLY" == "y" ]; then
+      mknod /dev/urandom c: 1 9
+    else
+      echo "Dropbear will not operate without /dev/urandom, exiting."
+      exit 1
+    fi
+fi
+
+mkdir -p /opt/etc/dropbear
+
+if [ ! -f /opt/etc/dropbear/dropbear_rsa_host_key ]; then
+    /opt/sbin/dropbearkey -t rsa -f /opt/etc/dropbear/dropbear_rsa_host_key
+fi
+
+if [ ! -f /opt/etc/dropbear/dropbear_dss_host_key ]; then
+    /opt/sbin/dropbearkey -t dss -f /opt/etc/dropbear/dropbear_dss_host_key
+fi
+
+if [ ! -d /root ] ;  then
+	mkdir /root
+fi
+
+/opt/etc/init.d/S51dropbear

@@ -1,0 +1,26 @@
+#!/bin/sh 
+# Copyright (C) 2006-2011 OpenWrt.org 
+
+
+
+start() { 
+        [ ! -d /var/cache ] && ln -s /opt/var/cache /var/cache
+        /opt/sbin/cupsd
+	echo "starting cupsd"
+} 
+
+stop() { 
+        killall cupsd
+	echo "stopping cupsd" 
+} 
+
+reload() { 
+        killall cupsd 
+        sleep 1 
+        /opt/sbin/cupsd
+	echo "restarting cupsd" 
+} 
+
+$1 
+# end of script 
+

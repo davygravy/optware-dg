@@ -1,0 +1,40 @@
+--- gnuplot/src/eval.c.orig	2010-01-06 17:35:10.000000000 +0000
++++ gnuplot/src/eval.c	2010-04-06 14:51:18.272941023 +0000
+@@ -155,26 +155,15 @@
+     {"besj1",  f_besj1},
+     {"besy0",  f_besy0},
+     {"besy1",  f_besy1},
+-    {"erf",  f_erf},
+-    {"erfc",  f_erfc},
+-    {"gamma",  f_gamma},
+-    {"lgamma",  f_lgamma},
+-    {"ibeta",  f_ibeta},
+-    {"igamma",  f_igamma},
+-    {"rand",  f_rand},
+     {"floor",  f_floor},
+     {"ceil",  f_ceil},
+ #ifdef BACKWARDS_COMPATIBLE
+     {"defined",  f_exists},       /* deprecated syntax defined(foo) */
+ #endif
+ 
+-    {"norm",  f_normal},	/* XXX-JG */
+-    {"inverf",  f_inverse_erf},	/* XXX-JG */
+-    {"invnorm",  f_inverse_normal},	/* XXX-JG */
+     {"asinh",  f_asinh},
+     {"acosh",  f_acosh},
+     {"atanh",  f_atanh},
+-    {"lambertw",  f_lambertw}, /* HBB, from G.Kuhnle 20001107 */
+ 
+     {"column",  f_column},	/* for using */
+     {"valid",  f_valid},	/* for using */
+--- gnuplot/src/Makefile.am.orig	2010-03-06 02:09:39.000000000 +0000
++++ gnuplot/src/Makefile.am	2010-04-06 15:01:17.764882004 +0000
+@@ -45,7 +45,7 @@
+ interpol.c interpol.h matrix.c matrix.h misc.c misc.h mouse.c mouse.h \
+ mousecmn.h national.h parse.c parse.h plot.c plot.h plot2d.c plot2d.h \
+ plot3d.c plot3d.h pm3d.c pm3d.h readline.c readline.h save.c \
+-save.h scanner.c scanner.h set.c setshow.h show.c specfun.c specfun.h \
++save.h scanner.c scanner.h set.c setshow.h show.c \
+ standard.c standard.h stdfn.c stdfn.h syscfg.h tables.c tables.h \
+ tabulate.c tabulate.h \
+ template.h term_api.h term.c term.h time.c unset.c util.c util.h \

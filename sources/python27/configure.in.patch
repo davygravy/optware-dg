@@ -1,0 +1,58 @@
+--- Python-2.7.2rc1/configure.in.orig	2011-05-29 14:54:52.000000000 -0700
++++ Python-2.7.2rc1/configure.in	2011-05-29 23:31:22.000000000 -0700
+@@ -5,8 +5,6 @@
+ # Set VERSION so we only need to edit in one place (i.e., here)
+ m4_define(PYTHON_VERSION, 2.7)
+ 
+-AC_PREREQ(2.65)
+-
+ AC_REVISION($Revision$)
+ AC_INIT(python, PYTHON_VERSION, http://bugs.python.org/)
+ AC_CONFIG_SRCDIR([Include/object.h])
+@@ -21,6 +19,11 @@
+     prefix=`echo "$prefix" | sed -e 's/\/$//g'`
+ fi    
+ 
++# find compiler while respecting --host setting
++AC_CANONICAL_HOST()
++AC_CHECK_TOOLS(CC,gcc cc)
++AC_CHECK_TOOLS(CXX,g++ c++)
++
+ dnl This is for stuff that absolutely must end up in pyconfig.h.
+ dnl Please use pyport.h instead, if possible.
+ AH_TOP([
+@@ -928,7 +931,7 @@
+ 	    STRICT_PROTO="-Wstrict-prototypes"
+ 	fi
+         # For gcc 4.x we need to use -fwrapv so lets check if its supported
+-        if "$CC" -v --help 2>/dev/null |grep -- -fwrapv > /dev/null; then
++        if "$TARGET_CC" -v --help 2>/dev/null |grep -- -fwrapv > /dev/null; then
+            WRAP="-fwrapv"
+         fi
+ 	case $ac_cv_prog_cc_g in
+@@ -4305,6 +4308,25 @@
+ done
+ AC_MSG_RESULT(done)
+ 
++AC_SUBST(BUILDPYTHON)
++AC_SUBST(BUILDPGEN)
++AC_SUBST(CROSS_COMPILE)
++if [[ $build != $host ]]; then
++    AC_MSG_NOTICE(Cross compiling: Configuring build python)
++    absconfigcommand=$(pwd)/$0
++    mkdir -p buildpython27
++    cd buildpython27
++    CC="" CXX="" AR="" RANLIB="" LDFLAGS="" $absconfigcommand --prefix=$prefix
++    cd ..
++    BUILDPYTHON='buildpython27/python$(BUILDEXE)'
++    BUILDPGEN='buildpython27/Parser/pgen$(BUILDEXE)'
++    CROSS_COMPILE=yes
++else
++    BUILDPYTHON='$(HOSTPYTHON)'
++    BUILDPGEN='$(HOSTPGEN)'
++    CROSS_COMPILE=no
++fi
++
+ # generate output files
+ AC_CONFIG_FILES(Makefile.pre Modules/Setup.config Misc/python.pc)
+ AC_CONFIG_FILES([Modules/ld_so_aix], [chmod +x Modules/ld_so_aix])

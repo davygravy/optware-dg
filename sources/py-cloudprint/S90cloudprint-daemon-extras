@@ -1,0 +1,161 @@
+#!/bin/sh
+# /etc/init.d/cloudprint
+# Description: Starts the Google Cloud Print script on startup
+# ----------------
+#
+# adapted for Optware for Broadcomm DD-WRT
+# see https://github.com/armooo/cloudprint/issues/46  for code basis
+# acks to casestudies  and   tomslominski
+
+# Adjust any of the following according to your distros structure and expectations:
+PIDFILE="/opt/var/run/cloudprint.pid"
+DIR="/opt/bin"
+PYBIN="python2.6"
+#  location of /opt/etc/ copy of cloudprint credential/authentication files
+AUTHFILEOPT="/opt/etc/cloudprint/.cloudprintauth"
+SASLFILEOPT="/opt/etc/cloudprint/.cloudprintauth.sasl"
+
+
+#  location of root cloudprint credential/authentication files
+#  **** ENABLE either the DD-WRT or the TomatoUSB section below, but not both!
+# on DD-WRT
+#AUTHFILEROOT="/tmp/root/.cloudprintauth"
+#SASLFILEROOT="/tmp/root/.cloudprintauth.sasl"
+# on TomatoUSB
+AUTHFILEROOT="/tmp/home/root/.cloudprintauth"
+SASLFILEROOT="/tmp/home/root/.cloudprintauth.sasl"
+
+
+
+
+case $1 in
+
+    setup)
+	printf "Setting up new credential files for your Google Cloudprint account..."
+        if [ -f $PIDFILE ]; then
+            printf "Cloudprint seems to be running with PID "
+	    echo `cat $PIDFILE`
+	    echo "Stop it first with the 'stop' option."
+	    exit 0
+        fi
+
+	# start by purging any old auth files and logging out 
+	test -e $AUTHFILEOPT || rm $AUTHFILEOPT
+	test -e $AUTHFILEROOT || rm $AUTHFILEROOT
+	test -e $SASLFILEOPT || rm $SASLFILEOPT
+	test -e $SASLFILEROOT || rm $SASLFILEROOT
+	$PYBIN $DIR/cloudprint -l
+	echo "You need a Google account set up, with a Google ID"
+	echo "As the prompts appear below, enter the following:"
+	echo "1.  your Google username followed by ENTER,"
+	echo " "
+	echo "2.  your Google password followed by ENTER,"
+	echo " "
+	echo "3.  then wait either 30 seconds or until"
+	echo "    the script responds with some sort of message"
+	echo "    stating success."
+	echo " "
+	sleep 5
+	$PYBIN $DIR/cloudprint -d -p $PIDFILE    
+	cp  $AUTHFILEROOT  $AUTHFILEOPT
+	cp  $SASLFILEROOT  $SASLFILEOPT
+	kill `cat $PIDFILE`
+	echo 
+	echo "Success: your Google Cloud Print authentication files have been created."
+	echo "You should now be able to start the Cloudprint daemon like this:"
+	echo "    /opt/etc/init.d/S90cloudprint-daemon start "
+	exit 0
+    ;;
+
+
+    start)
+        	###  check for account files
+	if [ -f $PIDFILE ]; then
+        	printf "Cloudprint seems to be already running with PID "
+		echo `cat $PIDFILE`
+		exit
+	fi
+        if [ ! -f $AUTHFILEROOT ] || [ ! -f $SASLFILEROOT ] ; then
+    		test -d /opt/etc/cloudprint || mkdir -p /opt/etc/cloudprint
+			if [ -f $AUTHFILEOPT ] && [ -f $SASLFILEOPT ] ; then
+    				cp $AUTHFILEOPT $AUTHFILEROOT
+				cp $SASLFILEOPT $SASLFILEROOT
+			else
+				echo "Some of your Cloudprint account authentication files seem to be missing."
+				echo "Try to start the daemon with the 'setup' option."
+				sleep 3
+                                exit
+			fi
+	else
+		test -e $AUTHFILEOPT || cp $AUTHFILEROOT  $AUTHFILEOPT
+                test -e $SASLFILEOPT || cp $SASLFILEROOT  $SASLFILEOPT
+	fi
+	printf "Starting Google Cloud Print..."
+	$PYBIN $DIR/cloudprint -d -p $PIDFILE -a $AUTHFILEROOT 
+	sleep 1
+	printf "started with PID "
+	echo `cat $PIDFILE`
+    ;;
+
+
+    stop)
+            if [ -f $PIDFILE ]; then
+                printf "Stopping Google Cloud Print..."
+                kill `cat $PIDFILE`
+                sleep 1
+                if [ -f $PIDFILE ]; then
+                    echo "Unable to stop Cloudprint daemon..."
+		    echo "Try manually killing the daemon or its python process"
+                else
+                    echo "Stopped"
+                fi
+            else
+                echo "Cloudprint is not running"
+            fi
+    ;;
+
+    restart)
+            if [ -f $PIDFILE ]; then
+                printf "Restarting Google Cloud Print..."
+                kill `cat $PIDFILE`
+                sleep 1
+                if [ -f $PIDFILE ]; then
+                    echo "Unable to stop Cloudprint daemon..."
+		    echo "Try manually killing the daemon or its python process"
+                else
+                    echo "Cloudprint daemon stopped"
+                    sleep 1
+                    $PYBIN $DIR/cloudprint -a $AUTHFILEROOT  -p $PIDFILE -d
+                    sleep 1
+                    echo "Cloudprint restarted with PID " `cat $PIDFILE`
+                fi
+            else
+                echo "Cloudprint is not running, so use the start option"
+            fi
+    ;;
+
+    logout)
+            printf "Logging out of Google Cloud Print..."
+            echo "Checking if daemon is running..."
+            if [ -f $PIDFILE ]; then
+                kill `cat $PIDFILE`
+                sleep 5
+                if [ -f $PIDFILE ]; then
+                    echo "Unable to stop Cloudprint daemon..."
+		    echo "Try manually killing the daemon or its python process, then try again"
+                else
+                    echo "Cloudprint daemon stopped"
+                fi
+	    fi
+            $PYBIN $DIR/cloudprint -l
+            sleep 1
+            echo "logged out of Cloudprint"
+    ;;
+
+
+    *)
+            echo "Usage: cloudprint-daemon {setup|start|stop|restart|logout}"
+    ;;
+esac
+exit 0
+

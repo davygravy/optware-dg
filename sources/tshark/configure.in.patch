@@ -1,0 +1,13 @@
+--- wireshark-0.99.6/configure.in.orig	2007-07-05 12:25:24.000000000 -0700
++++ wireshark-0.99.6/configure.in	2007-07-07 08:14:32.000000000 -0700
+@@ -1334,8 +1336,8 @@
+ #endif
+ }], [AC_MSG_RESULT(ok);
+ have_inet_pton=yes], [AC_MSG_RESULT(broken);
+-have_inet_pton=no], [AC_MSG_RESULT(cross compiling, assume it is broken);
+-have_inet_pton=no])],
++have_inet_pton=no], [AC_MSG_RESULT(cross compiling, assume it is ok);
++have_inet_pton=yes])],
+ have_inet_pton=no)
+ if test "$have_inet_pton" = no; then
+   INET_PTON_C="inet_pton.c"

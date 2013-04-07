@@ -1,0 +1,44 @@
+diff -ur torrentflux.old/html/searchEngines/isoHuntEngine.php torrentflux/html/searchEngines/isoHuntEngine.php
+--- torrentflux.old/html/searchEngines/isoHuntEngine.php	2008-05-28 20:50:04.000000000 -0300
++++ torrentflux/html/searchEngines/isoHuntEngine.php	2008-08-07 16:55:48.000000000 -0300
+@@ -132,7 +133,7 @@
+             $end = strrpos($thing, "»");
+         }
+ 
+-        $thing = substr($thing, 0, $end);
++        //$thing = substr($thing, 0, $end);
+         $tmpList = $thing;
+         //echo $tmpList;
+ 
+@@ -333,15 +334,15 @@
+                     else
+                     {
+ 
+-                        $tmpStr = $tmpListArr["0"];  // Download ID and Type
+-                        $this->CatName = $this->cleanLine($tmpStr); // Download ID and Type
++                        $tmpStr = $tmpListArr["1"];  // Download ID and Type
++                        $this->CatName = $this->cleanLine($tmpListArr["0"]); // Category
+                         $tmpStr = substr($tmpStr,strpos($tmpStr,"torrent_details/")+strlen("torrent_details/"));
+ 
+                         $this->torrentFile = "http://isohunt.com/download/".substr($tmpStr,0,strpos($tmpStr,",")-1);
+ 
+                         //$tmpListArr["1"] = $this->cleanLine($tmpListArr["1"]);  // Age
+-
+-                        $this->torrentName = $this->cleanLine($tmpListArr["2"]);
++                        
++                        $this->torrentName = $this->cleanLine($this->cleanCommentsLink($tmpListArr["2"]));
+ 
+                     }
+ 
+@@ -371,6 +372,11 @@
+         }
+     }
+ 
++    function cleanCommentsLink($stringIn)
++    {
++        return substr($stringIn, strpos($stringIn,"</a>") + 4);
++    }
++
+     function cleanLine($stringIn,$tags='')
+     {
+         if(empty($tags))
