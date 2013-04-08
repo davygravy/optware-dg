@@ -1,7 +1,33 @@
-For instructions on how to build packages using this build system, see:
+This of fork of Optware focuses on some fixes to allow AirPrint and 
+Google Cloud Print servers to run natively on Broadcom routers flashed with
+TomatoUSB and DD-WRT.  Some of it is based on previous work, but a few 
+pieces are bug fixes (such as in the cloudprint.py python script) and/or 
+special addistions to make things more towards "install and go".
+
+New optware packages in make/ :
+py26-cups
+py26-daemon
+py26-lockfile
+py26-cloudprint
+cups
+dbus
+avahi
+
+****
+
+A thread showing the ipkg-based __installation__ instructions can be found here:
+
+  http://tomatousb.org/forum/t-638158/airprint-and-google-cloud-print-via-optware
+
+A lengthy precursor thread (with considerable tedium, cruft and blither) can be found here:
+
+  http://tomatousb.org/forum/t-573238/airprint-google-cloud-print-cups-working-and-here-is-how
+
+
+*****
+For instructions on how to __build__ packages using this build system, see:
 
   http://www.nslu2-linux.org/wiki/Optware/AddAPackageToOptware
 
-NOTE:  This repo is a fork of Optware, specifically modified and updated
-for Broadcom routers running TomatoUSB and DD-WRT.
+
 
